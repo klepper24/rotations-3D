@@ -12,22 +12,16 @@ class Macierz3x3 {
 
 public:
 
-	//Macierz2x2() {}
+
 	~Macierz3x3() {}
-	Macierz3x3(double degree);
-	//operator () do odczytywania wartosci z macierzy, do zapisywania nalezaloby zrobic kolejny operator, patrz: 
+	Macierz3x3(char& znak, double degree);
 	double operator () (unsigned int a, unsigned int b) const
 	{
 		return mac[a][b];	
 	}
 
 	friend std::ostream& operator << (std::ostream &Strm, const Macierz3x3 &macierz);
-	//funkcja niepotrzebna ze wzgledu na przeciazony operator funkcyjny ()
-	/*
-	double get_mac(int a, int b) const
-	{
-		return mac[a][b];	
-	}*/
+	
 
 private:
 
