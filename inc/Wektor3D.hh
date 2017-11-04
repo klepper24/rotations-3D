@@ -15,10 +15,11 @@ public:
 			wek[i] = 0.0; //bo double 
 	}
 
-	Wektor3D(double a, double b) 
+	Wektor3D(double a, double b, double c) 
 	{
 		wek[0] = a;
 		wek[1] = b;
+		wek[2] = c;
 	}
 	~Wektor3D() = default;                      //obczaic default
 	double& operator [] (unsigned int index)    //przeciazenie operatorow w momencie const!!! najpierw kompilator szuka operatorow const
@@ -31,10 +32,10 @@ public:
 		return wek[index];
 	}
 
-	Wektor3D& operator + (const Wektor3D& wektor) const;
-	Wektor3D& operator - (const Wektor3D& wektor) const;
+	Wektor3D operator + (const Wektor3D& wektor) const;
+	Wektor3D operator - (const Wektor3D& wektor) const;
 	bool operator == (const Wektor3D& wektor) const;
-	friend Wektor3D& operator * (const Macierz3x3& macierz, const Wektor3D& wektor);	
+	friend Wektor3D operator * (const Macierz3x3& macierz, const Wektor3D& wektor);	
 	friend std::istream& operator >> (std::istream &Strm, Wektor3D &wektor);
 	friend std::ostream& operator << (std::ostream &Strm, const Wektor3D &wektor);
 

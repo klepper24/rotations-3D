@@ -4,6 +4,7 @@
 #include "Wektor3D.hh"
 #include "Macierz3x3.hh"
 #include "Prostopadloscian.hh"
+#include "Scena.hh"
 #include "lacze_do_gnuplota.hh"
 
 
@@ -45,32 +46,55 @@ bool zapisWspolrzednychDoPliku(const char *sNazwaPliku, Prostopadloscian& Pr)
   return !StrmPlikowy.fail();
 }
 
-void obracanieProstopadloscianu(Prostopadloscian& pro)
+void obracanieProstopadloscianu(Prostopadloscian& pro, Scena& sc)
 {
-	std::cout << "Podaj wartosc kata obrotu w stopniach: " << std::endl;
-	float kat;	
-	std::cin >> kat;
-	Macierz2x2 mac1(kat);
+	std::cout << "Podaj sekwencje oznaczen osi oraz katy obrotu w stopniach " << std::endl;
+	char os = 'a';
+	while(os != '.')
+	{
+				
+		std::cin >> os; 
+		
+		if(os == 'x' || os == 'y' || os == 'z')
+		{
+			float kat;			
+			std::cin >> kat;			
+			Macierz3x3 mac1(os, kat);
+			sc.macObrotu = sc.macObrotu * mac1;
+		}
+		else if(os == '.') {}
+		else
+		{
+			std::cout << "Bledne oznaczenie osi. Dopuszczalne znaki to: x  y  z  . " << std::endl;		
+			std::cout << ":( Sprobuj jeszcze raz." << std::endl;
+		}
+	}
+
 
 	std::cout << "Ile razy operacja obrotu ma byc powtorzona?" << std::endl;
 	unsigned int ile = 0;
 	std::cin >> ile;
 	for(unsigned int i = 0; i < ile; ++i)
-		pro.obroc(mac1);
+		pro.obroc(sc.macObrotu); 
 		
+}
+
+void wyswietlanieMacierzyRotacji(const Scena& sc)
+{
+	std::cout << sc.macObrotu;
 }
 
 void przesuwanieProstopadloscianu(Prostopadloscian& pro)
 {
 	std::cout << "Wprowadz wspolrzedne wektora translacji w postaci dwoch liczb, tzn. wspolrzednej x oraz wspolrzednej y: " << std::endl;
 
-	Wektor2D wek;
+	Wektor3D wek;
 	std::cin >> wek;
 	
 	pro.przesun(wek);
 }
 
-void wyswietlanieWspolrzednych(Prostopadloscian& pro)
+void wyswietlanieWspolrzednych(const Prostopadloscian& pro)
 {
 	std::cout << pro;
 }
@@ -99,6 +123,8 @@ int main()
 	Prostopadloscian pro1{Wektor3D(1,1,0),Wektor3D(11,1,0),Wektor3D(1,6,0),Wektor3D(11,6,0), 
 							Wektor3D(1,6,7),Wektor3D(11,6,7),Wektor3D(1,1,7),Wektor3D(11, 1,7)};
 
+	Scena s1;
+
 	PzG::LaczeDoGNUPlota  Lacze;  // Ta zmienna jest potrzebna do wizualizacji
                                 // rysunku prostokata
 
@@ -117,11 +143,13 @@ int main()
   Lacze.ZmienTrybRys(PzG::TR_3D);
 
    // Ustawienie zakresow poszczegolnych osi
-  Lacze.UstawZakresY(-155,155);
-  Lacze.UstawZakresX(-155,155);
-  Lacze.UstawZakresZ(-155,155);
+  Lacze.UstawZakresY(-150,150);
+  Lacze.UstawZakresX(-150,150);
+  Lacze.UstawZakresZ(-150,150);
 
 	wyswietlMenu();
+
+	
 	char wybor = 'a';
 	while(wybor != 'k')
 	{
@@ -131,21 +159,28 @@ int main()
 
 		switch(wybor)
 		{
-			case 'o': 	obracanieProstopadloscianu(pro1);
+			case 'o': 	obracanieProstopadloscianu(pro1, s1);
 						zapisWspolrzednychDoStrumienia(std::cout,pro1);
-  						if (!zapisWspolrzednychDoPliku("prostokat.dat",pro1)) 								return 1;
+  						if (!zapisWspolrzednychDoPliku("prostokat.dat",pro1)) 								
+							return 1;
   						Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
 						break;
 
-			case 't': 	
+			case 't': 	pro1.obroc(s1.macObrotu);
+						zapisWspolrzednychDoStrumienia(std::cout,pro1);
+  						if (!zapisWspolrzednychDoPliku("prostokat.dat",pro1)) 								
+							return 1;
+  						Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
+						break;
 						break;
 
-			case 'r': 	
+			case 'r': 	std::cout << s1.macObrotu;
 						break;
 
 			case 'p':   przesuwanieProstopadloscianu(pro1);
 						zapisWspolrzednychDoStrumienia(std::cout,pro1);
-  						if (!zapisWspolrzednychDoPliku("prostokat.dat",pro1)) 								return 1;
+  						if (!zapisWspolrzednychDoPliku("prostokat.dat",pro1)) 								
+							return 1;
   						Lacze.Rysuj(); // <- Tutaj gnuplot rysuje, to co zapisaliśmy do pliku
 						break;
 

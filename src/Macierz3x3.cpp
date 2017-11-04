@@ -1,7 +1,14 @@
 #include "Macierz3x3.hh"
 
 
-Macierz3x3::Macierz3x3(char& znak, double degree)
+Macierz3x3::Macierz3x3()
+{
+	for(unsigned int i = 0; i < rozmiar; ++i)
+		for(unsigned int j = 0; j < rozmiar; ++j)
+			mac[i][j] = 1;
+}
+
+Macierz3x3::Macierz3x3(const char& znak, double degree)
 {
 	switch(znak)
 	{
@@ -32,12 +39,29 @@ Macierz3x3::Macierz3x3(char& znak, double degree)
 	
 }
 
+Macierz3x3 operator * (const Macierz3x3& macierz1, const Macierz3x3& macierz2)
+{
+	Macierz3x3 temp;
+
+	for(unsigned int i = 0; i < macierz1.rozmiar; ++i)
+		for(unsigned int j = 0; j < macierz1.rozmiar; ++j)
+			temp.mac[i][j] += macierz1.mac[i][j] * macierz2.mac[j][i];
+
+	return temp; 
+	
+}
+
 std::ostream& operator << (std::ostream &Strm, const Macierz3x3 &macierz)
 {
 		
 	for(unsigned int i = 0; i < macierz.rozmiar; ++i)
+	{
 		for(unsigned int j = 0; j < macierz.rozmiar; ++j)
-  			Strm << std::setw(16) << std::fixed << std::setprecision(10) << macierz.mac[i][j];
+		{  		
+			Strm << std::setw(16) << std::fixed << std::setprecision(10) << macierz.mac[i][j];
+		}
+		std::cout << std::endl;	
+	}
 
 	return Strm << std::endl;
 }

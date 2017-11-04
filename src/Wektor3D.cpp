@@ -2,7 +2,7 @@
 
 
 
-Wektor3D& Wektor3D::operator + (const Wektor3D& wektor) const
+Wektor3D Wektor3D::operator + (const Wektor3D& wektor) const
 {
 	Wektor3D temp;
 	for(unsigned int i = 0; i < rozmiar; ++i)
@@ -14,7 +14,7 @@ Wektor3D& Wektor3D::operator + (const Wektor3D& wektor) const
 }
 
 
-Wektor3D& Wektor3D::operator - (const Wektor3D& wektor) const
+Wektor3D Wektor3D::operator - (const Wektor3D& wektor) const
 {
 	Wektor3D temp;  
 	for(unsigned int i = 0; i < rozmiar; ++i)
@@ -36,7 +36,7 @@ bool Wektor3D::operator == (const Wektor3D& wektor) const
 	return true;
 }
 
-Wektor3D& operator * (const Macierz3x3& macierz, const Wektor3D& wektor)
+Wektor3D operator * (const Macierz3x3& macierz, const Wektor3D& wektor)
 {
 	Wektor3D prim;
 

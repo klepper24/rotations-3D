@@ -12,16 +12,15 @@ class Macierz3x3 {
 
 public:
 
-
+	Macierz3x3();
 	~Macierz3x3() {}
-	Macierz3x3(char& znak, double degree);
+	Macierz3x3(const char& znak, double degree);
 	double operator () (unsigned int a, unsigned int b) const
 	{
 		return mac[a][b];	
 	}
-
+	friend Macierz3x3 operator * (const Macierz3x3& macierz1, const Macierz3x3& macierz2);	
 	friend std::ostream& operator << (std::ostream &Strm, const Macierz3x3 &macierz);
-	
 
 private:
 
